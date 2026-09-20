@@ -1,43 +1,70 @@
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![XGBoost](https://img.shields.io/badge/XGBoost-model-EB0028)
+![Status](https://img.shields.io/badge/status-complete-brightgreen)
+
 # Bank Fraud Detection System
 
-A machine learning project that detects fraudulent bank transactions using Python and XGBoost. Built this to get hands-on experience with real-world ML problems like class imbalance and feature engineering, following along with tutorials and then expanding on it with my own experiments.
+A machine learning pipeline that flags fraudulent bank transactions in a
+6M+ row dataset, built around the core challenge of real-world fraud
+detection: **the fraud you care about is under 1% of the data.**
+
+## At a glance
+
+| | |
+|---|---|
+| **Dataset** | 6M+ bank transactions (Kaggle) |
+| **Core challenge** | Severe class imbalance — fraud is a tiny fraction of transactions |
+| **Models compared** | Logistic Regression, Random Forest, XGBoost |
+| **Final model** | XGBoost, threshold-tuned for recall ≥ 90% |
+| **Why recall-first** | In fraud detection, missing real fraud is far costlier than a false alarm |
+
+---
 
 ## What it does
 
-The model looks at transaction data and predicts whether a transaction is fraudulent or not. The dataset has over 6 million transactions, but only a tiny fraction are actually fraud cases — so a big part of this project was figuring out how to handle that imbalance properly instead of just getting a high accuracy score that means nothing.
-
-## Dataset
-
-This project uses a bank transaction dataset from [Kaggle](https://www.kaggle.com) (~6M+ rows). The dataset file isn't included in this repo due to its size (470MB+), but the full notebook shows the exact preprocessing steps applied to it.
+The model looks at transaction-level data and predicts whether a transaction
+is fraudulent. With fraud cases this rare, a model that just predicts "not
+fraud" every time would score ~99% accuracy while catching nothing — so a
+core part of this project is building a pipeline that doesn't fall into that
+trap.
 
 ## Approach
 
-- **Feature engineering** — created new features like balance differences before/after transactions, log-transformed transaction amounts, and time-of-day patterns
-- **Handling class imbalance** — since fraud cases are rare, used techniques like `scale_pos_weight` and proper scaling so the model doesn't just ignore the minority class
-- **Model comparison** — trained and compared Logistic Regression, Random Forest, and XGBoost to see which performed best
-- **Threshold tuning** — instead of using the default 0.5 cutoff, tuned the decision threshold to prioritize catching more fraud cases (recall ≥ 90%)
-- **Deployment-ready** — saved the final trained model using `joblib` so it can be reused without retraining
+- **Feature engineering** — balance differences before/after transactions,
+  log-transformed transaction amounts, time-of-day patterns
+- **Class imbalance handling** — `scale_pos_weight` and proper scaling so
+  the model doesn't collapse toward the majority class
+- **Model comparison** — Logistic Regression, Random Forest, and XGBoost
+  evaluated head-to-head
+- **Threshold tuning** — moved off the default 0.5 cutoff and tuned the
+  decision threshold to prioritize catching fraud (recall ≥ 90%)
+- **Deployment-ready artifact** — final model persisted with `joblib` so it
+  can be reused without retraining
 
-## Tech Stack
+## Tech stack
 
-- Python
-- Pandas / NumPy
-- Scikit-learn
-- XGBoost
-- Matplotlib / Seaborn (for visualizing patterns and results)
+Python · Pandas / NumPy · Scikit-learn · XGBoost · Matplotlib / Seaborn
+
+## Dataset
+
+Bank transaction dataset from [Kaggle](https://www.kaggle.com) (~6M rows,
+470MB+). Not included in this repo due to size — the notebook documents the
+exact preprocessing steps applied to it end to end.
 
 ## Results
 
-The final XGBoost model was able to catch the large majority of fraudulent transactions while keeping false positives manageable — a good balance for a real banking use case where missing fraud is far more costly than a few extra alerts.
+The final XGBoost model catches the large majority of fraudulent
+transactions while keeping false positives at a manageable rate — the right
+tradeoff for a banking use case, where a missed fraud case is far more
+expensive than an extra manual review.
 
-## What I learned
+## What this project demonstrates
 
-This was my first real deep-dive into handling imbalanced datasets and understanding why accuracy isn't a good metric when one class is rare. I also got more comfortable with the practical side of ML — going from raw data to a model you could actually deploy.
-
-## Notes
-
-I built this project by following along with tutorials and then experimenting further on my own to understand the "why" behind each step, not just copy the code.
+Handling severely imbalanced classification correctly (not just optimizing
+for accuracy), comparing models rigorously rather than picking the first one
+that runs, and tuning a decision threshold against the metric that actually
+matters for the use case rather than the default.
 
 ---
-**Author:** Muhammad Talha Ansari
-**Connect:** [LinkedIn](https://www.linkedin.com/in/talha-ansari-504312375/) · [GitHub](https://github.com/M-TalhaAnsari)
+
+**Author:** Muhammad Talha Ansari — [LinkedIn](https://www.linkedin.com/in/talha-ansari-504312375/) · [GitHub](https://github.com/M-TalhaAnsari)
